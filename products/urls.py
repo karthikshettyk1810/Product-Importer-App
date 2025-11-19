@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Dashboard view
+    path('dashboard/', views.dashboard, name='dashboard'),
+    
     # API endpoints only
     path('api/products/', views.get_products, name='get_products'),
     path('api/products/create/', views.create_product, name='create_product'),
