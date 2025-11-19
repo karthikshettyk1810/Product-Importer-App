@@ -1,0 +1,39 @@
+/* Theme Transition Styles */
+
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+/* Exclude animations and transforms from theme transitions */
+*:not(.no-theme-transition) {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+}
+
+/* Preserve specific animations */
+.progress-bar-fill,
+.progress-shine,
+[class*="motion-"],
+[class*="animate-"] {
+  transition-property: none !important;
+}
+
+/* Smooth theme transitions for specific elements */
+.navbar,
+.card,
+.btn,
+.form-input,
+.form-select,
+.form-textarea,
+.modal,
+.modal-overlay,
+.table-container,
+.upload-zone,
+.webhook-card,
+.filter-group {
+  transition: background-color 0.3s ease, 
+              border-color 0.3s ease, 
+              color 0.3s ease,
+              box-shadow 0.3s ease;
+}

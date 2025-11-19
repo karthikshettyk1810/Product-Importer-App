@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block title %}Webhooks - Product Importer{%endblock %} {% block content %}
+<div class="webhooks-page">
+  <div class="page-header">
+    <h2>Webhook Management</h2>
+    <button id="createWebhookBtn" class="btn btn-primary">Add Webhook</button>
+  </div>
+  <div id="webhooksTable"></div>
+</div>
+<div id="webhookModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3 id="modalTitle">Create Webhook</h3>
+    <form id="webhookForm">
+      <input type="hidden" id="webhookId" />
+      <div class="form-group">
+        <label>URL:</label>
+        <input type="url" id="webhookUrl" required />
+      </div>
+      <div class="form-group">
+        <label>Event Type:</label>
+        <select id="webhookEventType" required>
+          <option value="product.created">Product Created</option>
+          <option value="product.updated">Product Updated</option>
+          <option value="upload.completed">Upload Completed</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label
+          ><input type="checkbox" id="webhookEnabled" checked /> Enabled</label
+        >
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
+</div>
+<div id="testResultModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Webhook Test Result</h3>
+    <div id="testResult"></div>
+    <button
+      class="btn"
+      onclick="document.getElementById('testResultModal').style.display='none'"
+    >
+      Close
+    </button>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script src="/static/js/webhooks.js"></script>
+{% endblock %}
