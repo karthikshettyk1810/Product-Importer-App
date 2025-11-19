@@ -119,6 +119,11 @@ body {
     margin-top: 1rem;
 }
 
+#cancelUpload {
+    margin-top: 1rem;
+    display: none;
+}
+
 .progress-bar {
     width: 100%;
     height: 30px;
@@ -166,6 +171,12 @@ body {
     background: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+
+.result-message.warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
 }
 
 .info-section {

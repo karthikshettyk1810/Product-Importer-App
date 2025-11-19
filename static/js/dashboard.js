@@ -1,3 +1,6 @@
+let currentEventSource = null;
+let currentTaskId = null;
+
 document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -16,6 +19,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         // Hide previous results
         hideMessage('uploadResult');
         document.getElementById('uploadProgress').style.display = 'block';
+        document.getElementById('cancelUpload').style.display = 'inline-block';
         
         // Upload file
         const response = await fetch('/products/api/upload/', {
@@ -30,10 +34,10 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         }
         
         // Start SSE for progress updates
-        const taskId = data.task_id;
-        const eventSource = new EventSource(`/products/api/upload/progress/${taskId}/`);
+        currentTaskId = data.task_id;
+        currentEventSource = new EventSource(`/products/api/upload/progress/${currentTaskId}/`);
         
-        eventSource.onmessage = (event) => {
+        currentEventSource.onmessage = (event) => {
             const progress = JSON.parse(event.data);
             
             // Update progress bar
@@ -43,20 +47,26 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             
             // Check if completed or error
             if (progress.status === 'Completed') {
-                eventSource.close();
+                currentEventSource.close();
+                currentEventSource = null;
+                currentTaskId = null;
                 showMessage('uploadResult', 'Upload completed successfully!', 'success');
                 fileInput.value = '';
                 setTimeout(() => {
                     document.getElementById('uploadProgress').style.display = 'none';
                 }, 3000);
             } else if (progress.status === 'Error') {
-                eventSource.close();
+                currentEventSource.close();
+                currentEventSource = null;
+                currentTaskId = null;
                 showMessage('uploadResult', 'Error: ' + (progress.error || 'Unknown error'), 'error');
             }
         };
         
-        eventSource.onerror = () => {
-            eventSource.close();
+        currentEventSource.onerror = () => {
+            currentEventSource.close();
+            currentEventSource = null;
+            currentTaskId = null;
             showMessage('uploadResult', 'Connection error. Please refresh to check status.', 'error');
         };
         
@@ -64,4 +74,27 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         showMessage('uploadResult', error.message, 'error');
         document.getElementById('uploadProgress').style.display = 'none';
     }
+});
+
+// Cancel upload functionality
+document.getElementById('cancelUpload').addEventListener('click', () => {
+    if (currentEventSource) {
+        currentEventSource.close();
+        currentEventSource = null;
+    }
+    
+    if (currentTaskId) {
+        // Optionally, you can call an API to revoke the task
+        // For now, we'll just stop listening to progress
+        currentTaskId = null;
+    }
+    
+    // Reset UI
+    document.getElementById('uploadProgress').style.display = 'none';
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('progressText').textContent = '0%';
+    document.getElementById('statusText').textContent = 'Initializing...';
+    document.getElementById('csvFile').value = '';
+    
+    showMessage('uploadResult', 'Upload cancelled by user', 'warning');
 });
