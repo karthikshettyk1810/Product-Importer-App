@@ -1,8 +1,3 @@
-Sure! Here is the **complete `.md` file content**, cleanly formatted and ready for GitHub.
-You can **copy–paste this into a file named `README.md`** directly.
-
----
-
 # **📦 Product Importer — Scalable CSV Upload System**
 
 A production-grade web application designed to handle **large CSV imports (500,000+ products)**, provide **real-time progress updates**, support **complete product management**, expose **webhook configurations**, and ensure **scalable asynchronous processing** using Celery/Dramatiq.
